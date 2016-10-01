@@ -30,18 +30,89 @@ def moves():
 		print (dic[key])
 		print("")
 
+#re-write the moves for a specfic opponent
+def write_moves(opponent): 
 
-#main 
-def main():
+	file = opponent + ".txt"
+	print(file)
+	open(file, "w").close()
 
-	# opponents()
-	# moves()
+	url  = "https://umbelmania.umbel.com/training/"
+	headers = {'content-type': 'application/json'}
+	payload = {"player_name" : "Herbie Fully Loaded", "opponent" : opponent}
+
+	res = request.post(url, headers = headers, json = payload)
+	match = res.json()
+
+	file = open(file, "w")
+
+	for move in range(1000):
+		match["move"] = "K"
+
+		attack = request.post(url, headers = headers, json = match)
+		match = attack.json()
+		opponentMove = match["gamestate"]["opponent_move"]
+		print(match["gamestate"]["moves_remaining"])
+		file.write(opponentMove.upper() + "\n")
+		print("")
+
+	file.close()
+	print(match)
+
+#fighting Pato Bajo, Jr.
+def fight_pato():
 
 	url  = "https://umbelmania.umbel.com/training/"
 	headers = {'content-type': 'application/json'}
 	payload = {"player_name" : "Herbie Fully Loaded", "opponent" : "pato-bajo-jr"}
-	match = request.post(url, headers = headers, json = payload)
-	print (match.json())
+
+	res = request.post(url, headers = headers, json = payload)
+	match = res.json()
+
+	print(match)
+
+	
+
+
+	# for move in range(1000):
+	# 	match["move"] = "K"
+
+	# 	attack = request.post(url, headers = headers, json = match)
+	# 	match = attack.json()
+	# 	opponentMove = match["gamestate"]["opponent_move"]
+	# 	print(opponentMove)
+	# 	file.write(opponentMove.upper() + "\n")
+	# 	print("")
+
+	# file.close()
+	# print(match)
+#main 
+def main():
+
+	opponents()
+	moves()
+	# fight_pato()
+
+	# write_moves("pato-bajo-jr")
+
+	# r = open('PatoBajoJr.txt', "r")
+	# for i in range(3):
+	# 	line = r.readline().rstrip()
+	# 	print(line)
+	# print ("done")
+
+
+	# res = request.post(url, headers = headers, json = payload)
+	# match = res.json()
+	# match["move"] = "K"
+	# # print(match)
+	# attack = request.post(url, headers = headers, json = match)
+	# x = attack.json()
+	# x["move"] = "K"
+	# newPost = request.post(url, headers = headers, json = x)
+	# print(newPost.json())
+	# prin(attack.json())
+	# print (res.json())
 
 	# print (moves.headers)
 	# print (opponents.json())
